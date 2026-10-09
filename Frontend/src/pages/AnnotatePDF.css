@@ -1,0 +1,1237 @@
+/* =========================================
+   ANNOTATE PDF - LEFT SIDEBAR EDITOR
+========================================= */
+
+.annotate-page {
+  --sidebar-width: 236px;
+  --editor-bg: #f1f5f9;
+  --primary: #4f46e5;
+  --primary-light: #eef2ff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+
+  min-height: 100vh;
+  padding: 24px;
+  background: var(--editor-bg);
+  color: var(--text-main);
+  box-sizing: border-box;
+}
+
+/* Shift editor content to make room for sidebar */
+.annotate-page:has(.annotate-toolbar) {
+  padding-left: calc(var(--sidebar-width) + 40px);
+}
+
+/* Header */
+.annotate-header {
+  margin-bottom: 24px;
+}
+
+.annotate-header h1 {
+  margin: 0 0 8px;
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.7px;
+  color: #0f172a;
+}
+
+.annotate-header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   LEFT SIDEBAR
+========================================= */
+
+.annotate-toolbar {
+  position: fixed;
+  top: 16px;
+  bottom: 16px;
+  left: 16px;
+  z-index: 100;
+
+  width: var(--sidebar-width);
+  max-height: calc(100vh - 32px);
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 22px;
+
+  padding: 20px 14px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.09);
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* Sidebar scrollbar */
+.annotate-toolbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.annotate-toolbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+/* Tools grid */
+.annotate-toolbar .tool-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  width: 100%;
+}
+
+/* Individual tool */
+.annotate-toolbar .tool-btn {
+  min-width: 0;
+  min-height: 76px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 10px 5px;
+
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  font-size: 12px;
+  font-weight: 650;
+  text-align: center;
+  cursor: pointer;
+
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.annotate-toolbar .tool-btn:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+  border-color: #c7d2fe;
+  transform: translateY(-1px);
+}
+
+.annotate-toolbar .tool-btn.active {
+  color: #ffffff;
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 5px 12px rgba(79, 70, 229, 0.22);
+}
+
+.annotate-toolbar .tool-btn:focus-visible {
+  outline: 3px solid #a5b4fc;
+  outline-offset: 2px;
+}
+
+/* =========================================
+   SIDEBAR OPTIONS
+========================================= */
+
+.annotate-toolbar .tool-options {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+
+  padding-top: 18px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.annotate-toolbar .tool-options > label {
+  margin-top: 5px;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+/* Color palette */
+.annotate-toolbar .color-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 2px;
+}
+
+.annotate-toolbar .color-btn {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #cbd5e1;
+  cursor: pointer;
+
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.annotate-toolbar .color-btn:hover {
+  transform: scale(1.12);
+}
+
+.annotate-toolbar .color-btn.selected {
+  box-shadow: 0 0 0 2px var(--primary);
+  transform: scale(1.08);
+}
+
+/* Width and font size selects */
+.annotate-toolbar .tool-options select,
+.text-options-panel select {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 11px;
+
+  color: #1e293b;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.annotate-toolbar .tool-options select:focus,
+.text-options-panel select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+/* =========================================
+   TEXT TOOL SETTINGS
+========================================= */
+
+.text-options-panel {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 110;
+
+  width: var(--sidebar-width);
+  max-height: 42vh;
+  overflow-y: auto;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+
+  padding: 14px;
+  padding-top: 4px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border: 1px solid #c7d2fe;
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+}
+
+/* Keep sidebar clear while text options are visible */
+.annotate-page:has(.text-options-panel) .annotate-toolbar {
+  bottom: min(42vh, 330px);
+}
+
+.text-options-panel .text-option-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.text-options-panel .text-option-item label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.text-options-panel .format-btn {
+  min-width: 38px;
+  min-height: 38px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 8px;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.text-options-panel .format-btn.active {
+  color: var(--primary);
+  background: var(--primary-light);
+  border-color: #c7d2fe;
+}
+
+.text-options-panel .background-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #475569;
+}
+
+/* =========================================
+   FILE BAR
+========================================= */
+
+.annotate-file-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  margin-bottom: 20px;
+  padding: 14px 18px;
+
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.file-info strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+
+.file-info span {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.remove-file-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 9px 12px;
+  color: #dc2626;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.remove-file-btn:hover {
+  background: #ffe4e6;
+}
+
+/* =========================================
+   PDF PAGE WORKSPACE
+========================================= */
+
+.pdf-pages-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+
+  width: 100%;
+  min-width: 0;
+  padding: 8px 0 24px;
+}
+
+.pdf-page-wrapper {
+  width: 100%;
+  max-width: 1000px;
+  min-width: 0;
+  padding: 12px;
+
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+  box-sizing: border-box;
+}
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 12px;
+  padding: 0 2px;
+}
+
+.page-heading > span {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.page-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.page-actions button:hover:not(:disabled) {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.page-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pdf-canvas-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.pdf-canvas-container canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pdf-canvas-container canvas:first-child {
+  z-index: 1;
+}
+
+.pdf-canvas-container .annotation-overlay {
+  z-index: 2;
+  touch-action: none;
+}
+
+.annotation-overlay {
+  cursor: crosshair;
+}
+
+.annotation-overlay.select-mode {
+  cursor: default;
+}
+
+/* =========================================
+   DOWNLOAD BAR
+========================================= */
+
+.annotate-bottom {
+  display: flex;
+  justify-content: center;
+  padding: 22px 0 30px;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  min-height: 48px;
+  padding: 13px 24px;
+
+  color: #ffffff;
+  background: var(--primary);
+  border: 0;
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+  box-shadow: 0 7px 16px rgba(79, 70, 229, 0.2);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.download-btn:hover:not(:disabled) {
+  background: #4338ca;
+  transform: translateY(-1px);
+}
+
+.download-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Status messages */
+.annotate-message {
+  margin: 14px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.annotate-message.error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.annotate-message.success {
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+/* Loading */
+.loading-state {
+  padding: 30px;
+  color: #64748b;
+  text-align: center;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+  .annotate-page {
+    --sidebar-width: 190px;
+    padding: 18px;
+  }
+
+  .annotate-page:has(.annotate-toolbar) {
+    padding-left: 222px;
+  }
+
+  .annotate-toolbar {
+    left: 12px;
+    top: 12px;
+    bottom: 12px;
+    max-height: calc(100vh - 24px);
+    padding: 14px 10px;
+  }
+
+  .text-options-panel {
+    left: 12px;
+    bottom: 12px;
+    width: 190px;
+  }
+
+  .annotate-page:has(.text-options-panel) .annotate-toolbar {
+    bottom: min(42vh, 330px);
+  }
+
+  .annotate-toolbar .tool-btn {
+    min-height: 68px;
+  }
+}
+
+@media (max-width: 600px) {
+  .annotate-page {
+    padding: 12px;
+  }
+
+  .annotate-page:has(.annotate-toolbar) {
+    padding-left: 12px;
+    padding-top: 12px;
+  }
+
+  /* Compact horizontal toolbar on mobile */
+  .annotate-toolbar {
+    position: sticky;
+    top: 0;
+    bottom: auto;
+    left: auto;
+
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+
+    margin: 0 0 16px;
+    padding: 12px;
+
+    border-radius: 14px;
+  }
+
+  .annotate-toolbar .tool-group {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .annotate-toolbar .tool-btn {
+    min-height: 62px;
+    padding: 8px 3px;
+    gap: 5px;
+  }
+
+  .annotate-toolbar .tool-btn span {
+    font-size: 10px;
+    overflow-wrap: anywhere;
+  }
+
+  .annotate-toolbar .tool-options {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 8px 12px;
+  }
+
+  .annotate-toolbar .tool-options .color-list {
+    grid-column: 2;
+  }
+
+  .annotate-toolbar .tool-options select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .text-options-panel {
+    position: sticky;
+    top: 10px;
+    left: auto;
+    bottom: auto;
+    width: 100%;
+    max-height: none;
+    margin-bottom: 14px;
+  }
+
+  .annotate-page:has(.text-options-panel) .annotate-toolbar {
+    bottom: auto;
+  }
+
+  .annotate-file-bar {
+    padding: 12px;
+  }
+
+  .pdf-page-wrapper {
+    padding: 6px;
+    border-radius: 10px;
+  }
+
+  .pdf-pages-container {
+    gap: 18px;
+  }
+
+  .download-btn {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   TEXT MODAL - FIXED OVERLAY AND DESIGN
+========================================= */
+
+.text-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 20px !important;
+  box-sizing: border-box !important;
+
+  background: rgba(15, 23, 42, 0.65) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  overflow-y: auto !important;
+}
+
+.text-modal-backdrop .text-modal {
+  position: relative !important;
+  z-index: 100000 !important;
+
+  width: 100% !important;
+  max-width: 560px !important;
+  max-height: calc(100dvh - 40px) !important;
+  overflow-y: auto !important;
+
+  margin: auto !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+
+  color: #0f172a !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 20px !important;
+
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.28) !important;
+
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* Modal heading */
+.text-modal-header {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+
+  padding-bottom: 18px !important;
+  margin-bottom: 20px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.text-modal-header h3 {
+  margin: 0 0 6px !important;
+  color: #0f172a !important;
+  font-size: 23px !important;
+  font-weight: 800 !important;
+}
+
+.text-modal-header p {
+  margin: 0 !important;
+  color: #64748b !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+
+.text-modal-header > button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 38px !important;
+  height: 38px !important;
+  flex-shrink: 0 !important;
+
+  color: #475569 !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+}
+
+.text-modal-header > button:hover {
+  color: #dc2626 !important;
+  background: #fee2e2 !important;
+}
+
+/* Form labels and fields */
+.text-modal .text-input-wrapper,
+.text-modal .text-option-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.text-modal .text-input-wrapper {
+  margin-bottom: 18px !important;
+}
+
+.text-modal label,
+.text-modal .text-input-wrapper > label {
+  color: #334155 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+.text-modal textarea,
+.text-modal select {
+  width: 100% !important;
+  box-sizing: border-box !important;
+
+  color: #0f172a !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+
+  font: inherit;
+  font-size: 14px !important;
+  outline: none !important;
+}
+
+.text-modal textarea {
+  min-height: 120px !important;
+  padding: 12px !important;
+  resize: vertical !important;
+}
+
+.text-modal select {
+  min-height: 42px !important;
+  padding: 9px 10px !important;
+}
+
+.text-modal textarea:focus,
+.text-modal select:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.13) !important;
+}
+
+/* Text preview */
+.text-modal .text-preview-box {
+  min-width: 0 !important;
+  margin-bottom: 20px !important;
+  padding: 12px !important;
+
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.text-modal .text-preview-box > span {
+  display: block !important;
+  margin-bottom: 12px !important;
+  color: #64748b !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.7px !important;
+}
+
+.text-modal .text-preview-box > div {
+  min-height: 48px;
+  overflow-wrap: anywhere !important;
+}
+
+/* Font, size and rotation */
+.text-modal .text-modal-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin-bottom: 18px !important;
+}
+
+/* Formatting buttons */
+.text-modal .text-modal-format {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 18px !important;
+}
+
+.text-modal .format-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+
+  min-height: 38px !important;
+  padding: 8px 11px !important;
+
+  color: #475569 !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 9px !important;
+  cursor: pointer !important;
+}
+
+.text-modal .format-btn.active {
+  color: #4338ca !important;
+  background: #eef2ff !important;
+  border-color: #a5b4fc !important;
+}
+
+/* Background option */
+.text-modal .background-option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  margin-bottom: 22px !important;
+  cursor: pointer !important;
+}
+
+.text-modal .background-option input {
+  width: 16px;
+  height: 16px;
+  accent-color: #4f46e5;
+}
+
+/* Footer actions */
+.text-modal .text-modal-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+
+  padding-top: 16px !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+.text-modal .cancel-text-btn,
+.text-modal .save-text-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  min-height: 42px !important;
+  padding: 10px 18px !important;
+  border-radius: 10px !important;
+
+  font-size: 13px !important;
+  font-weight: 750 !important;
+  cursor: pointer !important;
+}
+
+.text-modal .cancel-text-btn {
+  color: #334155 !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.text-modal .save-text-btn {
+  color: #ffffff !important;
+  background: #4f46e5 !important;
+  border: 1px solid #4f46e5 !important;
+}
+
+.text-modal .save-text-btn:hover:not(:disabled) {
+  background: #4338ca !important;
+}
+
+.text-modal .save-text-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Small screens */
+@media (max-width: 520px) {
+  .text-modal-backdrop {
+    padding: 10px !important;
+  }
+
+  .text-modal-backdrop .text-modal {
+    max-height: calc(100dvh - 20px) !important;
+    padding: 17px !important;
+    border-radius: 15px !important;
+  }
+
+  .text-modal .text-modal-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .text-modal-header h3 {
+    font-size: 20px !important;
+  }
+
+  .text-modal .text-modal-actions > button {
+    flex: 1;
+  }
+}
+
+/* =========================================
+   PDF UPLOAD UI - DESIGN FIX
+========================================= */
+
+.annotate-page:not(:has(.annotate-toolbar)) {
+  padding: 32px;
+}
+
+.annotate-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 55vh;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 680px;
+  min-height: 320px;
+  padding: 42px 24px;
+  box-sizing: border-box;
+
+  color: #475569;
+  background: #ffffff;
+  border: 2px dashed #c7d2fe;
+  border-radius: 24px;
+
+  text-align: center;
+  cursor: pointer;
+
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.upload-box:hover {
+  background: #f5f7ff;
+  border-color: #6366f1;
+  box-shadow: 0 18px 42px rgba(79, 70, 229, 0.12);
+  transform: translateY(-3px);
+}
+
+.upload-box > svg {
+  width: 64px;
+  height: 64px;
+  padding: 16px;
+  margin-bottom: 18px;
+  box-sizing: border-box;
+
+  color: #4f46e5;
+  background: #eef2ff;
+  border-radius: 18px;
+}
+
+.upload-box h3 {
+  margin: 0 0 10px;
+  color: #0f172a;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.upload-box p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .annotate-page:not(:has(.annotate-toolbar)) {
+    padding: 16px;
+  }
+
+  .annotate-upload {
+    min-height: 50vh;
+    padding: 12px 0;
+  }
+
+  .upload-box {
+    min-height: 260px;
+    padding: 28px 16px;
+    border-radius: 18px;
+  }
+
+  .upload-box h3 {
+    font-size: 21px;
+  }
+}
+
+
+/* Header: title left, download button right */
+.annotate-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.annotate-header-content {
+  flex: 1;
+  min-width: 180px;
+}
+
+.header-download-btn {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Keep header button compact */
+.annotate-header .download-btn {
+  min-height: 44px;
+  padding: 11px 18px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .annotate-header {
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .annotate-header-content {
+    flex-basis: 100%;
+  }
+
+  .header-download-btn {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* =========================================
+   SELECTED TEXT ACTION BAR
+========================================= */
+
+.selected-text-toolbar {
+  position: sticky;
+  top: 12px;
+  z-index: 120;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+
+  width: fit-content;
+  max-width: 100%;
+  margin: 16px auto;
+  padding: 10px 14px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border: 1px solid #c7d2fe;
+  border-radius: 14px;
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.12);
+}
+
+/* Selected indicator */
+.selected-text-toolbar > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 11px;
+  color: #4338ca;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 9px;
+
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.selected-text-toolbar > span::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  background: #6366f1;
+  border-radius: 50%;
+}
+
+/* Edit and Delete buttons */
+.selected-text-toolbar > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-height: 38px;
+  padding: 9px 13px;
+
+  color: #334155;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.selected-text-toolbar > button:hover {
+  color: #4338ca;
+  background: #eef2ff;
+  border-color: #a5b4fc;
+  transform: translateY(-1px);
+}
+
+/* Delete button */
+.selected-text-toolbar > button.delete-selected-btn {
+  color: #dc2626;
+  background: #fff1f2;
+  border-color: #fecdd3;
+}
+
+.selected-text-toolbar > button.delete-selected-btn:hover {
+  color: #ffffff;
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+/* Keyboard accessibility */
+.selected-text-toolbar > button:focus-visible {
+  outline: 3px solid #a5b4fc;
+  outline-offset: 2px;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+  .selected-text-toolbar {
+    position: sticky;
+    top: 8px;
+
+    width: 100%;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px;
+    border-radius: 12px;
+  }
+
+  .selected-text-toolbar > span {
+    flex-basis: 100%;
+    justify-content: center;
+  }
+
+  .selected-text-toolbar > button {
+    flex: 1;
+    padding: 10px 8px;
+  }
+}
+
+
+
+
+
