@@ -7,7 +7,7 @@
 A modern web-based PDF toolkit built with **React, Vite, Node.js, and Express.js**. Manage, convert, compress, organize, and secure your PDF documents with an easy-to-use interface powered by open-source technologies.
 
 <p align="center">
-  <img src="frontend/public/pd fnexa-logo.png" alt="PDFNexa Logo" width="120" />
+  <img width="120" alt="PDFNexa Logo" src="https://github.com/user-attachments/assets/f575a406-cc01-43cb-8da3-1fb23e4ec26c" />
 </p>
 
 <p align="center">
@@ -150,16 +150,4 @@ Contributions, ideas, bug reports, and feature suggestions are welcome.
 3. Commit your changes.
 4. Open a pull request.
 
-## 🔒 Privacy & Security
-
-PDFNexa is designed around a self-managed PDF processing backend. Before uploading sensitive documents, review the deployment's file-storage, temporary-file cleanup, and security configuration.
-
-Do not upload confidential documents to a public or untrusted deployment.
-
-## 📜 License
-
-Choose a license before distributing the project publicly. If you intend to use the MIT License, add a `LICENSE` file containing the appropriate license text.
-
----
-
-**PDFNexa — Simplify PDFs. Work Smarter. Get More Done.** 📄✨
+<img width="1024" height="1024" alt="PDFNexa" src="https://github.com/user-attachments/assets/4caa2f2e-6500-43a0-ba90-1a9f8e5fa0ae" />
